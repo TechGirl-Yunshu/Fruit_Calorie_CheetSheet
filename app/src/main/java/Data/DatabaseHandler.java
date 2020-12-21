@@ -107,4 +107,37 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return caloriesList;
 
     }
+
+    //update record
+
+    public int updateCalorie(Calories calorie){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(Util.KEY_FRUIT_NAME, calorie.getFruitName());
+        values.put(Util.KEY_FRUIT_CALORIE, calorie.getCalorie());
+
+        //update row
+        return db.update(Util.TABLE_NAME, values, Util.KEY_ID + "=?", new String[]{String.valueOf(calorie.getId())});
+    }
+
+    //delete record
+
+    public void deleteCalorie(Calories calorie){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(Util.TABLE_NAME, Util.KEY_ID + "=?", new String[]{String.valueOf(calorie.getId())});
+
+        db.close();
+    }
+
+    //get total record
+
+    public int getTotalRecord(){
+        String countQuery = "SELECT * FROM " + Util.TABLE_NAME;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(countQuery, null);
+
+        return cursor.getCount();
+    }
+
 }
